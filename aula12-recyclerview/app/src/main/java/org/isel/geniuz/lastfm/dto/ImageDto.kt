@@ -1,8 +1,13 @@
-package org.geniuz.lastfm.dto
+package org.isel.geniuz.lastfm.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ImageDto(
+class ImageDto(
     @field:SerializedName("#text")
-    val uri: String, val size: String
-)
+    val uri: String,
+    val size: String
+) {
+    override fun toString(): String {
+        return "ImageDto(\"$uri\", \"$size\")"
+    }
+}

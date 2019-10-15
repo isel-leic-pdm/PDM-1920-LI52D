@@ -1,9 +1,18 @@
-package org.geniuz.lastfm.dto
+package org.isel.geniuz.lastfm.dto
 
-data class ArtistDto(
+class ArtistDto(
     val name: String,
     val listeners: Int,
     val mbid: String,
     val url: String,
-    val image: Array<ImageDto>
-)
+    vararg val image: ImageDto
+) {
+    override fun toString(): String {
+        return "ArtistDto(" +
+                "\"$name\", " +
+                "$listeners, " +
+                "\"$mbid\" , " +
+                "\"$url\", " +
+                "${image.contentToString()})"
+    }
+}

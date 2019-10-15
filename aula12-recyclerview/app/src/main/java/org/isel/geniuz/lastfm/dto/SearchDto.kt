@@ -1,4 +1,4 @@
-package org.geniuz.lastfm.dto
+package org.isel.geniuz.lastfm.dto
 
 import com.google.gson.annotations.SerializedName
 

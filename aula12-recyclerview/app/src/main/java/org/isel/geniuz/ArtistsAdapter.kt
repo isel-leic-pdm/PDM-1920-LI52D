@@ -1,11 +1,15 @@
 package org.isel.geniuz
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import org.geniuz.lastfm.dto.ArtistDto
+import org.isel.geniuz.lastfm.dto.ArtistDto
+
+const val ARTIST_MBID = "ARTIST_MBID"
+const val ARTIST_NAME = "ARTIST_NAME"
 
 class ArtistsAdapter(private val artists: Array<ArtistDto>)
     : RecyclerView.Adapter<ArtistViewHolder>()
@@ -26,11 +30,22 @@ class ArtistsAdapter(private val artists: Array<ArtistDto>)
     }
 }
 
-class ArtistViewHolder(private val artistsView: LinearLayout) : RecyclerView.ViewHolder(artistsView) {
-    private val txtArtistName: TextView = artistsView.findViewById<TextView>(R.id.txtArtistName)
-    private val txtArtistUrl: TextView = artistsView.findViewById<TextView>(R.id.txtArtistUrl)
+class ArtistViewHolder(private val view: LinearLayout) : RecyclerView.ViewHolder(view) {
+    private lateinit var artist: ArtistDto
+    private val txtArtistName: TextView = view.findViewById<TextView>(R.id.txtArtistName)
+    private val txtArtistUrl: TextView = view.findViewById<TextView>(R.id.txtArtistUrl)
+
+    init {
+        view.setOnClickListener {
+            val intent = Intent(view.context, AlbumsActivity::class.java)
+            intent.putExtra(ARTIST_MBID, artist.mbid)
+            intent.putExtra(ARTIST_NAME, artist.name)
+            view.context.startActivity(intent)
+        }
+    }
 
     fun bindTo(artist: ArtistDto) {
+        this.artist = artist
         txtArtistName.text = artist.name
         txtArtistUrl.text = artist.url
     }
