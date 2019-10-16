@@ -11,7 +11,7 @@ import org.isel.geniuz.lastfm.dto.ArtistDto
 const val ARTIST_MBID = "ARTIST_MBID"
 const val ARTIST_NAME = "ARTIST_NAME"
 
-class ArtistsAdapter(var artists: Array<ArtistDto>)
+class ArtistsAdapter(val model: ArtistsViewModel)
     : RecyclerView.Adapter<ArtistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
@@ -23,10 +23,10 @@ class ArtistsAdapter(var artists: Array<ArtistDto>)
         return ArtistViewHolder(artistsView)
     }
 
-    override fun getItemCount(): Int = artists.size
+    override fun getItemCount(): Int = model.artists.size
 
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
-        holder.bindTo(artists[position])
+        holder.bindTo(model.artists[position])
     }
 }
 

@@ -1,26 +1,30 @@
 package org.isel.geniuz
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import org.geniuz.lastfm.LastfmWebApi
+import org.isel.geniuz.lastfm.LastfmWebApiBlocking
 import org.isel.geniuz.lastfm.LastfmWebApiMock
-import org.isel.geniuz.lastfm.dto.ArtistDto
 
 const val TAG : String = "GENIUZ_APP"
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    val lastfm : LastfmWebApiMock by lazy {
-        LastfmWebApiMock()
+    val lastfm : LastfmWebApi by lazy {
+        LastfmWebApi(this)
     }
     val adapter : ArtistsAdapter by lazy {
-        ArtistsAdapter(emptyArray())
+        ArtistsAdapter(model)
+    }
+    val model : ArtistsViewModel by lazy {
+        ViewModelProviders.of(this)[ArtistsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,17 +47,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
          */
         Log.v(TAG, "**** FETCHING from Last.fm...")
         val name = txtSearchArtistName.text.toString()
-        val artists = lastfm.searchArtist(name, 1)
-        /**
-         * Update UI
-         */
-        adapter.artists = artists
-        adapter.notifyDataSetChanged()
-        txtTotalArtists.text = artists.size.toString()
-    }
+        lastfm.searchArtist(name, 1, {artists ->
+            /**
+             * Update UI
+             */
+            model.artists = artists.results.artistMatches.artist
+            adapter.notifyDataSetChanged()
+            txtTotalArtists.text = artists.results.totalResults.toString()
+        }, {err -> throw err})
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        isChangingConfigurations()
     }
 }
