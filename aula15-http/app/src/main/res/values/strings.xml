@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Geniuz</string>
+    <string name="button_search">Search</string>
 </resources>

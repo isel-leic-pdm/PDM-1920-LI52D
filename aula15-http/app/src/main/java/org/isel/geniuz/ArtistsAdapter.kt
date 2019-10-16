@@ -11,9 +11,9 @@ import org.isel.geniuz.lastfm.dto.ArtistDto
 const val ARTIST_MBID = "ARTIST_MBID"
 const val ARTIST_NAME = "ARTIST_NAME"
 
-class ArtistsAdapter(private val artists: Array<ArtistDto>)
-    : RecyclerView.Adapter<ArtistViewHolder>()
-{
+class ArtistsAdapter(var artists: Array<ArtistDto>)
+    : RecyclerView.Adapter<ArtistViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         // 1. Obter o TextView i.e. artist_view
         // 2. Inflate parent com o artist_view
