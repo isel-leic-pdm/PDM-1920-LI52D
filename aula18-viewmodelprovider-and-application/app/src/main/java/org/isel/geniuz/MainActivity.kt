@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.geniuz.lastfm.LastfmWebApi
-import org.isel.geniuz.lastfm.LastfmWebApiBlocking
-import org.isel.geniuz.lastfm.LastfmWebApiMock
 
 const val TAG : String = "GENIUZ_APP"
 
@@ -45,9 +43,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         /**
          * Fetch data
          */
-        Log.v(TAG, "**** FETCHING from Last.fm...")
         val name = txtSearchArtistName.text.toString()
+        Log.v(TAG, "**** FETCHING Artists $name from Last.fm...")
         lastfm.searchArtist(name, 1, {artists ->
+            Log.v(TAG, "**** FETCHING Artists $name COMPLETED !!!!")
             /**
              * Update UI
              */

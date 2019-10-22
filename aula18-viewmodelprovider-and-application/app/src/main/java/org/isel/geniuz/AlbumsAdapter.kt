@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.isel.geniuz.lastfm.dto.AlbumDto
 
-class AlbumsAdapter(private val albums: List<AlbumDto>)
+class AlbumsAdapter(private val model: AlbumsViewModel)
     : RecyclerView.Adapter<AlbumViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
@@ -16,10 +16,10 @@ class AlbumsAdapter(private val albums: List<AlbumDto>)
         return AlbumViewHolder(view)
     }
 
-    override fun getItemCount(): Int = albums.size
+    override fun getItemCount(): Int = model.albums.size
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        holder.bindTo(albums[position])
+        holder.bindTo(model.albums[position])
     }
 }
 
