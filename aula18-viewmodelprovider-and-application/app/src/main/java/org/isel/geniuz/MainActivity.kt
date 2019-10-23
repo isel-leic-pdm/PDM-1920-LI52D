@@ -15,14 +15,13 @@ const val TAG : String = "GENIUZ_APP"
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    val lastfm : LastfmWebApi by lazy {
-        LastfmWebApi(this)
-    }
     val adapter : ArtistsAdapter by lazy {
         ArtistsAdapter(model)
     }
     val model : ArtistsViewModel by lazy {
-        ViewModelProviders.of(this)[ArtistsViewModel::class.java]
+        val app = application as GeniuzApp
+        val factory = LasftfmViewModelProviderFactory(app)
+        ViewModelProviders.of(this, factory)[ArtistsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,17 +39,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         findViewById<Button>(R.id.buttonSearch).setOnClickListener(this)
     }
     override fun onClick(v: View) {
-        /**
-         * Fetch data
-         */
         val name = txtSearchArtistName.text.toString()
-        Log.v(TAG, "**** FETCHING Artists $name from Last.fm...")
-        lastfm.searchArtist(name, 1, {artists ->
-            Log.v(TAG, "**** FETCHING Artists $name COMPLETED !!!!")
+        model.searchArtist(name, {artists ->
             /**
              * Update UI
              */
-            model.artists = artists.results.artistMatches.artist
             adapter.notifyDataSetChanged()
             txtTotalArtists.text = artists.results.totalResults.toString()
         }, {err -> throw err})

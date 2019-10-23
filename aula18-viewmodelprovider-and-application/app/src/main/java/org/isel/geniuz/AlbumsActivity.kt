@@ -11,14 +11,13 @@ import org.geniuz.lastfm.LastfmWebApi
 
 class AlbumsActivity : AppCompatActivity() {
 
-    val lastfm: LastfmWebApi by lazy {
-        LastfmWebApi(this)
-    }
     val adapter : AlbumsAdapter by lazy {
         AlbumsAdapter(model)
     }
     val model : AlbumsViewModel by lazy {
-        ViewModelProviders.of(this)[AlbumsViewModel::class.java]
+        val app = application as GeniuzApp
+        val factory = LasftfmViewModelProviderFactory(app)
+        ViewModelProviders.of(this, factory)[AlbumsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +38,7 @@ class AlbumsActivity : AppCompatActivity() {
         /**
          * Get albums from artist with mbid
          */
-        Log.v(TAG, "**** FETCHING Albums $mbid from Last.fm...")
-        lastfm.getAlbums(mbid, 1, {albums ->
-            Log.v(TAG, "**** FETCHING Albums $mbid COMPLETED !!!!")
-            model.albums = albums.topalbums.album
+        model.getAlbums(mbid, {
             adapter.notifyDataSetChanged()
         }, {err -> throw err})
     }

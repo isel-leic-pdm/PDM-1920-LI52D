@@ -1,6 +1,7 @@
 package org.geniuz.lastfm
 
 import android.content.Context
+import android.os.AsyncTask
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -35,15 +36,20 @@ class LastfmWebApi(ctx: Context) {
         onError: (VolleyError) -> Unit)
     {
         val url = String.format(LASTFM_SEARCH, name, page)
-        // !!!!! ToDo: Students must refactor this code to avoid duplication of the
-        //   HTTP request code !!!
+        // !!!!! ToDo: Students must refactor this code to avoid duplication of the HTTP request code !!!
+        val task = object: AsyncTask<String, Int, SearchDto>() {
+            override fun doInBackground(vararg resp: String): SearchDto {
+                Thread.sleep(4000)
+                return gson.fromJson<SearchDto>(resp[0], SearchDto::class.java)
+            }
+            override fun onPostExecute(result: SearchDto) = onSuccess(result)
+        }
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,
             Response.Listener<String> { response ->
-                val dto = gson.fromJson<SearchDto>(response, SearchDto::class.java)
-                onSuccess(dto)
+                task.execute(response)
             },
             Response.ErrorListener { err -> onError(err)})
         // Add the request to the RequestQueue.
