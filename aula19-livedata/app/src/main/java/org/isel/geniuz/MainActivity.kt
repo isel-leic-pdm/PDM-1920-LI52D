@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,16 +38,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
          * Setup search button
          */
         findViewById<Button>(R.id.buttonSearch).setOnClickListener(this)
+        /**
+         * Setup observer on LiveData
+         */
+        model.observe(this) {
+            adapter.notifyDataSetChanged()
+            txtTotalArtists.text = it?.size.toString()
+        }
     }
     override fun onClick(v: View) {
         val name = txtSearchArtistName.text.toString()
-        model.searchArtist(name, {artists ->
-            /**
-             * Update UI
-             */
-            adapter.notifyDataSetChanged()
-            txtTotalArtists.text = artists.results.totalResults.toString()
-        }, {err -> throw err})
-
+        model.searchArtist(name)
     }
 }
