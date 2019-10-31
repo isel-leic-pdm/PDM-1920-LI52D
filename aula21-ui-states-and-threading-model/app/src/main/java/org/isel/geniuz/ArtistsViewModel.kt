@@ -12,10 +12,12 @@ import org.isel.geniuz.lastfm.dto.ArtistDto
 
 class ArtistsViewModel(private val lastfm: LastfmWebApi) : ViewModel(), Parcelable {
 
-    private var liveData : MutableLiveData<Array<ArtistDto>> = MutableLiveData(emptyArray())
+    private val liveData : MutableLiveData<Array<ArtistDto>> by lazy {
+        MutableLiveData<Array<ArtistDto>>(emptyArray())
+    }
 
     val artists : Array<ArtistDto>
-        get() = liveData.value!!
+    get() = liveData.value!!
 
     private var current : String? = null
 
