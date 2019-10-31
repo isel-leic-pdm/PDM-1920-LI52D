@@ -59,21 +59,27 @@ class LastfmWebApi(ctx: Context) {
     fun getAlbums(
         mbid: String,
         page: Int,
-        onSuccess: (GetAlbumsDto) -> Unit,
+        doInSuccess: (GetAlbumsDto) -> Unit,
         onError: (VolleyError) -> Unit)
     {
         val url = String.format(LASTFM_GET_ALBUMS, mbid, page)
         // !!!!! ToDo: Students must refactor this code to avoid duplication of the
-        //   HTTP request code !!!
+
+        val task = object: AsyncTask<String, Int, GetAlbumsDto>() {
+            override fun doInBackground(vararg resp: String): GetAlbumsDto {
+                Thread.sleep(4000)
+                val dto = gson.fromJson<GetAlbumsDto>(resp[0], GetAlbumsDto::class.java)
+                doInSuccess(dto)
+                return dto
+            }
+            // override fun onPostExecute(result: GetAlbumsDto) = doInSuccess(result)
+        }
+
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,
-            Response.Listener<String> { response ->
-                Thread.sleep(3000)
-                val dto = gson.fromJson<GetAlbumsDto>(response, GetAlbumsDto::class.java)
-                onSuccess(dto)
-            },
+            Response.Listener<String> { response -> task.execute(response) },
             Response.ErrorListener { err -> onError(err)})
         // Add the request to the RequestQueue.
         queue.add(stringRequest)

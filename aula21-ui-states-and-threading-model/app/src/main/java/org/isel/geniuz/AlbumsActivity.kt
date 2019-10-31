@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,14 +16,16 @@ class AlbumsActivity : AppCompatActivity() {
         AlbumsAdapter(model)
     }
     val model : AlbumsViewModel by lazy {
-        val app = application as GeniuzApp
-        val factory = LasftfmViewModelProviderFactory(app)
+        val factory = AlbumsViewModelProviderFactory()
         ViewModelProviders.of(this, factory)[AlbumsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_albums)
+        model.albums.observe(this, Observer {
+            adapter.notifyDataSetChanged()
+        })
         /**
          * Setup recyclerArtists with ArtistsAdapter
          */
@@ -38,8 +41,6 @@ class AlbumsActivity : AppCompatActivity() {
         /**
          * Get albums from artist with mbid
          */
-        model.getAlbums(mbid, {
-            adapter.notifyDataSetChanged()
-        }, {err -> throw err})
+        model.getAlbums(mbid!!)
     }
 }

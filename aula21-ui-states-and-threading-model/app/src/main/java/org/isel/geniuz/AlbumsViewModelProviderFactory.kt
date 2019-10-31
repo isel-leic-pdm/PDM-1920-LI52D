@@ -3,12 +3,11 @@ package org.isel.geniuz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class LasftfmViewModelProviderFactory(val app:GeniuzApp) : ViewModelProvider.Factory{
+class AlbumsViewModelProviderFactory() : ViewModelProvider.Factory{
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when (modelClass) {
-            AlbumsViewModel::class.java -> AlbumsViewModel(app.lastfm) as T
-            ArtistsViewModel::class.java -> ArtistsViewModel(app.lastfm) as T
+            AlbumsViewModel::class.java -> AlbumsViewModel(GeniuzApp.lastfm) as T
             else -> throw IllegalArgumentException("There is no ViewModel for class $modelClass")
         }
     }

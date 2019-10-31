@@ -16,10 +16,10 @@ class AlbumsAdapter(private val model: AlbumsViewModel)
         return AlbumViewHolder(view)
     }
 
-    override fun getItemCount(): Int = model.albums.size
+    override fun getItemCount(): Int = model.albums.value?.size ?: 0
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        holder.bindTo(model.albums[position])
+        holder.bindTo(model.albums.value!![position])
     }
 }
 
