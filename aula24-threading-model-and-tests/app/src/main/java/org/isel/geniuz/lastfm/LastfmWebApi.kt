@@ -39,7 +39,7 @@ class LastfmWebApi(ctx: Context) {
         // !!!!! ToDo: Students must refactor this code to avoid duplication of the HTTP request code !!!
         val task = object: AsyncTask<String, Int, SearchDto>() {
             override fun doInBackground(vararg resp: String): SearchDto {
-                Thread.sleep(4000)
+                // Thread.sleep(4000)
                 return gson.fromJson<SearchDto>(resp[0], SearchDto::class.java)
             }
             override fun onPostExecute(result: SearchDto) = onSuccess(result)

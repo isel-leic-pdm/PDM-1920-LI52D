@@ -12,7 +12,7 @@ import org.isel.geniuz.lastfm.dto.ArtistDto
 
 class ArtistsViewModel(private val lastfm: LastfmWebApi) : ViewModel(), Parcelable {
 
-    private var liveData : MutableLiveData<Array<ArtistDto>> = MutableLiveData(emptyArray())
+    private val liveData : MutableLiveData<Array<ArtistDto>> = MutableLiveData(emptyArray())
 
     val artists : Array<ArtistDto>
         get() = liveData.value!!
@@ -30,9 +30,9 @@ class ArtistsViewModel(private val lastfm: LastfmWebApi) : ViewModel(), Parcelab
     fun searchArtist(name: String)
     {
         current = name
-        Log.v(TAG, "**** FETCHING Artists $name from Last.fm...")
+        println("**** FETCHING Artists $name from Last.fm...")
         lastfm.searchArtist(name, 1, {artists ->
-            Log.v(TAG, "**** FETCHING Artists $name COMPLETED !!!!")
+            println("**** FETCHING Artists $name COMPLETED !!!!")
             this.liveData.value = artists.results.artistMatches.artist
         }, { throw it })
     }
