@@ -2,14 +2,12 @@ package org.geniuz.lastfm
 
 import android.content.Context
 import android.os.AsyncTask
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
-import org.isel.geniuz.TAG
 import org.isel.geniuz.lastfm.dto.GetAlbumsDto
 import org.isel.geniuz.lastfm.dto.SearchDto
 
@@ -41,7 +39,7 @@ class LastfmWebApi(ctx: Context) {
         // !!!!! ToDo: Students must refactor this code to avoid duplication of the HTTP request code !!!
         val task = object: AsyncTask<String, Int, SearchDto>() {
             override fun doInBackground(vararg resp: String): SearchDto {
-                // Thread.sleep(4000)
+                Thread.sleep(4000)
                 return gson.fromJson<SearchDto>(resp[0], SearchDto::class.java)
             }
             override fun onPostExecute(result: SearchDto) = onSuccess(result)
