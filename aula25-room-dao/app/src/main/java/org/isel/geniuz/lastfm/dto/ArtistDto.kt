@@ -8,7 +8,7 @@ class ArtistDto(
     vararg val image: ImageDto
 ) {
     override fun toString(): String {
-        return "ArtistDto(" +
+        return "ArtistDao(" +
                 "\"$name\", " +
                 "$listeners, " +
                 "\"$mbid\" , " +
