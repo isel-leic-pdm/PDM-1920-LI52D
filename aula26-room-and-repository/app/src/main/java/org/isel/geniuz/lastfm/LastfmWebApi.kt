@@ -32,17 +32,18 @@ class LastfmWebApi(ctx: Context) {
     fun searchArtist(
         name: String,
         page: Int,
-        onSuccess: (SearchDto) -> Unit,
+        doOnSuccess: (SearchDto) -> Unit,
         onError: (VolleyError) -> Unit)
     {
         val url = String.format(LASTFM_SEARCH, name, page)
         // !!!!! ToDo: Students must refactor this code to avoid duplication of the HTTP request code !!!
-        val task = object: AsyncTask<String, Int, SearchDto>() {
-            override fun doInBackground(vararg resp: String): SearchDto {
+        val task = object: AsyncTask<String, Int, Unit>() {
+            override fun doInBackground(vararg resp: String) {
                 // Thread.sleep(4000)
-                return gson.fromJson<SearchDto>(resp[0], SearchDto::class.java)
+                val result = gson.fromJson<SearchDto>(resp[0], SearchDto::class.java)
+                doOnSuccess(result)
             }
-            override fun onPostExecute(result: SearchDto) = onSuccess(result)
+            // override fun onPostExecute(result: SearchDto) = doOnSuccess(result)
         }
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(

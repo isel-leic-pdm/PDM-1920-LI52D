@@ -2,10 +2,9 @@ package org.isel.geniuz
 
 import androidx.lifecycle.ViewModelProviders
 import org.awaitility.kotlin.await
-import org.isel.geniuz.lastfm.dto.ArtistDto
+import org.isel.geniuz.model.Artist
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -22,7 +21,7 @@ class ArtistsViewModelTest {
         val ctr = Robolectric.buildActivity(MainActivity::class.java).setup()
         val factory = ArtistsViewModelProviderFactory(null)
         val model = ViewModelProviders.of(ctr.get(), factory)[ArtistsViewModel::class.java]
-        val cf = CompletableFuture<Array<ArtistDto>>()
+        val cf = CompletableFuture<Array<Artist>>()
         model.observe(ctr.get()) {
             if(it.size > 0)
                 cf.complete(it)

@@ -2,24 +2,19 @@ package org.isel.geniuz
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import org.geniuz.lastfm.LastfmWebApi
-import org.isel.geniuz.lastfm.dto.ArtistDto
+import androidx.lifecycle.*
+import org.isel.geniuz.model.Artist
 
-class ArtistsViewModel(private val lastfm: LastfmWebApi) : ViewModel(), Parcelable {
+class ArtistsViewModel() : ViewModel(), Parcelable {
 
-    private val liveData : MutableLiveData<Array<ArtistDto>> = MutableLiveData(emptyArray())
+    private val liveData : MutableLiveData<Array<Artist>> = MutableLiveData(emptyArray())
 
-    val artists : Array<ArtistDto>
+    val artists : Array<Artist>
         get() = liveData.value!!
 
     private var current : String? = null
 
-    constructor(parcel: Parcel) : this(GeniuzApp.lastfm) {
+    constructor(parcel: Parcel) : this() {
         searchArtist(parcel.readString()!!)
     }
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -31,13 +26,14 @@ class ArtistsViewModel(private val lastfm: LastfmWebApi) : ViewModel(), Parcelab
     {
         current = name
         println("**** FETCHING Artists $name from Last.fm...")
-        lastfm.searchArtist(name, 1, {artists ->
+        val res: LiveData<List<Artist>> = GeniuzApp.artistRepo.findByName(name)
+        MediatorLiveData<List<Artist>>().addSource(res, Observer {
             println("**** FETCHING Artists $name COMPLETED !!!!")
-            this.liveData.value = artists.results.artistMatches.artist
-        }, { throw it })
+            liveData.value = it.toTypedArray()
+        })
     }
 
-    fun observe(owner: LifecycleOwner, observer: (Array<ArtistDto>) -> Unit) {
+    fun observe(owner: LifecycleOwner, observer: (Array<Artist>) -> Unit) {
         liveData.observe(owner, Observer {
             observer(it)
         })

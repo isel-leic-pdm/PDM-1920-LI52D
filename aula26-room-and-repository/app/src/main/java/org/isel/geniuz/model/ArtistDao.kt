@@ -1,10 +1,7 @@
 package org.isel.geniuz.model
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface ArtistDao {
@@ -14,7 +11,7 @@ interface ArtistDao {
     @Query("SELECT * FROM artists WHERE name LIKE :name")
     fun findByName(name: String): LiveData<List<Artist>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg users: Artist)
 
     @Delete

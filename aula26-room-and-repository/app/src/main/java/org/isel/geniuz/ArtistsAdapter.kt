@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.isel.geniuz.lastfm.dto.ArtistDto
+import org.isel.geniuz.model.Artist
 
 const val ARTIST_MBID = "ARTIST_MBID"
 const val ARTIST_NAME = "ARTIST_NAME"
@@ -31,7 +32,7 @@ class ArtistsAdapter(val model: ArtistsViewModel)
 }
 
 class ArtistViewHolder(private val view: LinearLayout) : RecyclerView.ViewHolder(view) {
-    private lateinit var artist: ArtistDto
+    private lateinit var artist: Artist
     private val txtArtistName: TextView = view.findViewById<TextView>(R.id.txtArtistName)
     private val txtArtistUrl: TextView = view.findViewById<TextView>(R.id.txtArtistUrl)
 
@@ -44,7 +45,7 @@ class ArtistViewHolder(private val view: LinearLayout) : RecyclerView.ViewHolder
         }
     }
 
-    fun bindTo(artist: ArtistDto) {
+    fun bindTo(artist: Artist) {
         this.artist = artist
         txtArtistName.text = artist.name
         txtArtistUrl.text = artist.url

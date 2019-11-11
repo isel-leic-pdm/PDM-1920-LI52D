@@ -19,7 +19,7 @@ class ArtistsViewModelProviderFactory(val savedInstanceState: Bundle?) : ViewMod
         else when (modelClass) {
             ArtistsViewModel::class.java -> {
                 Log.v(TAG, "**** CREATED ArtistsViewModel from the scratch!!!")
-                ArtistsViewModel(GeniuzApp.lastfm) as T
+                ArtistsViewModel() as T
             }
             else -> throw IllegalArgumentException("There is no ViewModel for class $modelClass")
         }
