@@ -7,12 +7,13 @@ import org.isel.geniuz.model.Artist
 
 class ArtistsViewModel() : ViewModel(), Parcelable {
 
-    private val liveData : MutableLiveData<Array<Artist>> = MutableLiveData(emptyArray())
+    private val liveData : MediatorLiveData<Array<Artist>> = MediatorLiveData()
 
     val artists : Array<Artist>
-        get() = liveData.value!!
+        get() = liveData.value?: emptyArray()
 
     private var current : String? = null
+    private var source: LiveData<List<Artist>>? = null
 
     constructor(parcel: Parcel) : this() {
         searchArtist(parcel.readString()!!)
@@ -25,12 +26,14 @@ class ArtistsViewModel() : ViewModel(), Parcelable {
     fun searchArtist(name: String)
     {
         current = name
+        if(source != null)
+            liveData.removeSource(source!!)
         println("**** FETCHING Artists $name from Last.fm...")
-        val res: LiveData<List<Artist>> = GeniuzApp.artistRepo.findByName(name)
-        MediatorLiveData<List<Artist>>().addSource(res, Observer {
+        source = GeniuzApp.artistRepo.findByName(name)
+        liveData.addSource(source!!) {
             println("**** FETCHING Artists $name COMPLETED !!!!")
             liveData.value = it.toTypedArray()
-        })
+        }
     }
 
     fun observe(owner: LifecycleOwner, observer: (Array<Artist>) -> Unit) {

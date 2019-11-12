@@ -1,21 +1,22 @@
 package org.isel.geniuz
 
-import android.os.AsyncTask
+import android.os.Looper.getMainLooper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import org.awaitility.kotlin.await
-import org.isel.geniuz.lastfm.dto.ArtistDto
 import org.isel.geniuz.model.Artist
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.LooperMode
+import org.robolectric.annotation.LooperMode.Mode.PAUSED
 import java.util.concurrent.CompletableFuture
 
 @RunWith(RobolectricTestRunner::class)
+@LooperMode(PAUSED)
 class ArtistRepositoryTest {
     @Test
     fun testFindByMuse() {
@@ -37,19 +38,13 @@ class ArtistRepositoryTest {
                 finish.complete(null)
             }
         })
-        await.until {
-            Robolectric.flushBackgroundThreadScheduler()
-            true
-        }
+        /**
+         * Wait for background tasks completion and Flush foreground tasks
+         */
         await.pollInSameThread().until {
-            Robolectric.flushForegroundThreadScheduler()
+            // Robolectric.flushForegroundThreadScheduler()
+            shadowOf(getMainLooper()).idle()
             finish.isDone
         }
     }
-
-    fun asyncInsert(artist: Artist) =
-        CompletableFuture.supplyAsync {
-            println("Thread ${Thread.currentThread().hashCode()}")
-            GeniuzApp.db.artistDao().insertAll(artist)
-        }
 }
