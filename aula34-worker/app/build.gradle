@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "org.isel.geniuz"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -26,6 +26,14 @@ android {
             includeAndroidResources = true
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -41,6 +49,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation "androidx.room:room-runtime:2.2.1"
     kapt "androidx.room:room-compiler:2.2.1"
+    implementation "androidx.work:work-runtime-ktx:2.2.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

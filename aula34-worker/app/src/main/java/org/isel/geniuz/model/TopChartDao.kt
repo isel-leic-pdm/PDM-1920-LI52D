@@ -8,10 +8,10 @@ import androidx.room.Query
 
 @Dao
 interface TopChartDao {
-    @Query("SELECT * FROM topchart")
+    @Query("SELECT * FROM topchart ORDER BY listeners")
     fun getAll(): LiveData<List<TopChartTrack>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg users: TopChartTrack)
+    fun insertAll(vararg tracks: TopChartTrack)
 
 }
