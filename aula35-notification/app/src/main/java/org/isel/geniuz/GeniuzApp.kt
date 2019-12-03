@@ -30,6 +30,7 @@ class GeniuzApp : Application() {
         db = Room
                 .databaseBuilder(applicationContext,GeniuzDb::class.java, "geniuz-db" )
                 .build()
+        createNotificationChannel()
         scheduleBackgroundWork()
     }
 
