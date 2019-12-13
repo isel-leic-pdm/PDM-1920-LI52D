@@ -16,7 +16,7 @@ const val ARTISTS_VIEW_STATE: String = "ARTISTS_VIEW_STATE"
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     val adapter : ArtistsAdapter by lazy {
-        ArtistsAdapter(model)
+        ArtistsAdapter(model, this)
     }
     lateinit var model : ArtistsViewModel
 

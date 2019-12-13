@@ -3,6 +3,7 @@
     package="org.isel.geniuz">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".GeniuzApp"
@@ -13,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChartActivity"></activity>
+
+        <activity android:name=".TracksActivity" />
+        <activity android:name=".ChartActivity" />
         <activity
             android:name=".AlbumsActivity"
             android:parentActivityName=".MainActivity" />
