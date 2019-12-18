@@ -44,7 +44,8 @@ class TracksActivity : AppCompatActivity() {
 
     fun play(track: Track) {
         this.track = track
-        playNow()
+        // playNow()
+        launchTrackService()
     }
 
     fun playNow() {
@@ -52,6 +53,14 @@ class TracksActivity : AppCompatActivity() {
             setDataSource(this@TracksActivity, track.uri)
             prepare() // !!!! might take long !!!! (for buffering, etc)
             start()
+        }
+    }
+
+    private fun launchTrackService() {
+        Intent(applicationContext, TracksService::class.java).apply {
+            action = ACTION_PLAY
+            putExtra(TRACK_OBJECT, track)
+            startForegroundService(this)
         }
     }
 
